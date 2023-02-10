@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import {Component} from '@angular/core';
 import {FormGroup, FormControl, Validators} from "@angular/forms";
 
 @Component({
@@ -7,12 +7,19 @@ import {FormGroup, FormControl, Validators} from "@angular/forms";
   styleUrls: ['./register.component.css']
 })
 export class RegisterComponent {
+
+  name = new FormControl('', [Validators.required, Validators.minLength(3)])
+  email = new FormControl('', [Validators.required, Validators.email])
+  age = new FormControl('', [Validators.required])
+  password = new FormControl('')
+  confirm_password = new FormControl('')
+  phoneNumber = new FormControl('')
   registerForm = new FormGroup({
-    name: new FormControl('', [Validators.required]),
-    email: new FormControl('', [Validators.required,Validators.email]),
-    age: new FormControl('', [Validators.required]),
-    password: new FormControl(''),
-    confirm_password: new FormControl(''),
-    phoneNumber: new FormControl('')
+    name: this.name,
+    email: this.email,
+    age: this.age,
+    password: this.password,
+    confirm_password: this.confirm_password,
+    phoneNumber: this.phoneNumber
   })
 }

@@ -2,6 +2,7 @@ import {Component} from '@angular/core';
 import {FormGroup, FormControl, Validators} from "@angular/forms";
 import {AuthService} from "../../services/auth.service";
 import IUser from "../../../models/user.model";
+import {RegisterValidators} from "../validators/register-validators";
 
 
 @Component({
@@ -31,7 +32,7 @@ export class RegisterComponent {
     password: this.password,
     confirm_password: this.confirm_password,
     phoneNumber: this.phoneNumber
-  })
+  }, [RegisterValidators.match('password', 'confirm_password')])
 
   async register() {
     this.showAlert = true
@@ -40,7 +41,7 @@ export class RegisterComponent {
     this.inSubmission = true
 
     try {
-        await this.auth.createUser(this.registerForm.value as IUser)
+      await this.auth.createUser(this.registerForm.value as IUser)
     } catch (e) {
       console.error(e)
       this.alertMsg = 'An unexpected error occurred. Please try again later'

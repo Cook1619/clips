@@ -8,9 +8,8 @@ describe('AuthModalComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ AuthModalComponent ]
-    })
-    .compileComponents();
+      declarations: [AuthModalComponent],
+    }).compileComponents();
 
     fixture = TestBed.createComponent(AuthModalComponent);
     component = fixture.componentInstance;

@@ -12,7 +12,7 @@ export class ManageComponent implements OnInit {
   constructor(private router: Router, private route: ActivatedRoute) {}
 
   ngOnInit(): void {
-    this.route.queryParamMap.subscribe((params: Params) => {
+    this.route.queryParams.subscribe((params: Params) => {
       this.videoOrder = params.sort == '2' ? params.sort : '1';
     });
   }
@@ -20,6 +20,14 @@ export class ManageComponent implements OnInit {
   sort(event: Event) {
     const { value } = event.target as HTMLSelectElement;
 
-    this.router.navigateByUrl(`/manage?sort=${value}`);
+    // both of these lines of code accomplish the same thing, navigate can do more
+    // this.router.navigateByUrl(`/manage?sort=${value}`);
+
+    this.router.navigate([], {
+      relativeTo: this.route,
+      queryParams: {
+        sort: value,
+      },
+    });
   }
 }

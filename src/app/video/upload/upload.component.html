@@ -4,7 +4,8 @@
     <div class="font-bold mb-6">Upload Video</div>
 
     <!-- Upload Dropbox -->
-    <div *ngIf="!nextStep; else uploadFormCtr"
+    <div
+      *ngIf="!nextStep; else uploadFormCtr"
       app-event-blocker
       (dragend)="isDragOver = false"
       (dragover)="isDragOver = true"

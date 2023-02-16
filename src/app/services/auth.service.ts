@@ -5,8 +5,8 @@ import {
   AngularFirestoreCollection,
 } from '@angular/fire/compat/firestore';
 import IUser from '../../models/user.model';
-import { delay, map, Observable } from 'rxjs';
-import { ActivatedRoute, Router } from '@angular/router';
+import { delay, map, Observable, filter, switchMap, of } from 'rxjs';
+import { ActivatedRoute, Router, NavigationEnd } from '@angular/router';
 
 @Injectable({
   providedIn: 'root',
@@ -15,6 +15,7 @@ export class AuthService {
   private usersCollection: AngularFirestoreCollection<IUser>;
   public isAuthenticated$: Observable<boolean>;
   public isAuthenticatedWithDelay$: Observable<boolean>;
+  private redirect = false;
 
   constructor(
     private auth: AngularFireAuth,
@@ -25,6 +26,17 @@ export class AuthService {
     this.usersCollection = db.collection('users');
     this.isAuthenticated$ = auth.user.pipe(map((user) => !!user));
     this.isAuthenticatedWithDelay$ = this.isAuthenticated$.pipe(delay(1000));
+    // we are filtering the router events, the one we care about is Navigation End
+    // All this hooplah is needed because of the data on the route isn't accessible within the auth service
+    this.router.events
+      .pipe(
+        filter((e) => e instanceof NavigationEnd),
+        map((e) => this.route.firstChild),
+        switchMap((route) => route?.data ?? of({}))
+      )
+      .subscribe((data) => {
+        this.redirect = data.authOnly ?? false;
+      });
   }
 
   public async createUser(userData: IUser) {
@@ -57,6 +69,8 @@ export class AuthService {
       $event.preventDefault();
     }
     await this.auth.signOut();
-    await this.router.navigateByUrl('/');
+    if (this.redirect) {
+      await this.router.navigateByUrl('/');
+    }
   }
 }

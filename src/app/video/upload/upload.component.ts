@@ -5,4 +5,11 @@ import { Component } from '@angular/core';
   templateUrl: './upload.component.html',
   styleUrls: ['./upload.component.css'],
 })
-export class UploadComponent {}
+export class UploadComponent {
+  isDragOver = false;
+
+  storeFile(event: Event) {
+    this.isDragOver = false;
+    console.log('file uploaded');
+  }
+}

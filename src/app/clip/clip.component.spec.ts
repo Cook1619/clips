@@ -8,9 +8,8 @@ describe('ClipComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ ClipComponent ]
-    })
-    .compileComponents();
+      declarations: [ClipComponent],
+    }).compileComponents();
 
     fixture = TestBed.createComponent(ClipComponent);
     component = fixture.componentInstance;

@@ -15,7 +15,13 @@ import { VideoModule } from './video/video.module';
 import { ClipComponent } from './clip/clip.component';
 
 @NgModule({
-  declarations: [AppComponent, NavComponent, HomeComponent, AboutComponent, ClipComponent],
+  declarations: [
+    AppComponent,
+    NavComponent,
+    HomeComponent,
+    AboutComponent,
+    ClipComponent,
+  ],
   imports: [
     BrowserModule,
     AppRoutingModule,

@@ -19,6 +19,11 @@ export class UploadComponent {
   uploadForm = new FormGroup({
     title: this.title,
   });
+  showAlert = false;
+  alertMsg = 'Please wait, your video is being uploaded.';
+  alertColor = 'blue';
+  inSubmission = false;
+
   constructor(private storage: AngularFireStorage) {}
 
   storeFile($event: Event) {
@@ -34,10 +39,21 @@ export class UploadComponent {
   }
 
   uploadFile() {
-    console.log('File uploaded');
+    this.showAlert = true;
+    this.alertMsg = 'Please wait, your account is being created.';
+    this.alertColor = 'blue';
+    this.inSubmission = true;
     const clipFileName = uuid();
     const clipPath = `clips/${clipFileName}.mp4`;
-
-    this.storage.upload(clipPath, this.file);
+    try {
+      this.storage.upload(clipPath, this.file);
+    } catch (e) {
+      console.error(e);
+      this.alertMsg = 'An unexpected error occurred. Please try again later';
+      this.alertColor = 'red';
+      return;
+    }
+    this.alertMsg = 'Success! Your video has been uploaded.';
+    this.alertColor = 'green';
   }
 }

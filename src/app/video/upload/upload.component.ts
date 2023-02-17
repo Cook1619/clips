@@ -23,6 +23,7 @@ export class UploadComponent {
   alertMsg = 'Please wait, your video is being uploaded.';
   alertColor = 'blue';
   inSubmission = false;
+  percentage = 0;
 
   constructor(private storage: AngularFireStorage) {}
 
@@ -46,7 +47,11 @@ export class UploadComponent {
     const clipFileName = uuid();
     const clipPath = `clips/${clipFileName}.mp4`;
     try {
-      this.storage.upload(clipPath, this.file);
+      const task = this.storage.upload(clipPath, this.file);
+
+      task.percentageChanges().subscribe((progress) => {
+        this.percentage = (progress as number) / 100;
+      });
     } catch (e) {
       console.error(e);
       this.alertMsg = 'An unexpected error occurred. Please try again later';

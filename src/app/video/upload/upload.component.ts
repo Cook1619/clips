@@ -2,7 +2,10 @@ import { Component } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { AngularFireStorage } from '@angular/fire/compat/storage';
 import { v4 as uuid } from 'uuid';
-import { last } from 'rxjs';
+import { last, switchMap } from 'rxjs';
+import { AngularFireAuth } from '@angular/fire/compat/auth';
+import firebase from 'firebase/compat/app';
+import { ClipService } from '../../services/clip.service';
 
 @Component({
   selector: 'app-upload',
@@ -26,8 +29,16 @@ export class UploadComponent {
   inSubmission = false;
   percentage = 0;
   showPercentage = false;
+  user: firebase.User | null = null;
 
-  constructor(private storage: AngularFireStorage) {}
+  constructor(
+    private storage: AngularFireStorage,
+    private auth: AngularFireAuth,
+    private clipsService: ClipService
+  ) {
+    // user will never be null because of route guards
+    auth.user.subscribe((user) => (this.user = user));
+  }
 
   storeFile($event: Event) {
     this.isDragOver = false;
@@ -51,6 +62,7 @@ export class UploadComponent {
     const clipPath = `clips/${clipFileName}.mp4`;
     try {
       const task = this.storage.upload(clipPath, this.file);
+      const clipRef = this.storage.ref(clipPath);
 
       task.percentageChanges().subscribe((progress) => {
         this.percentage = (progress as number) / 100;
@@ -58,9 +70,20 @@ export class UploadComponent {
       // We are using the last() method to grab the last snapshotChange which is always either going to be the success or failure of the upload
       task
         .snapshotChanges()
-        .pipe(last())
+        .pipe(
+          last(),
+          switchMap(() => clipRef.getDownloadURL())
+        )
         .subscribe({
-          next: (snaphot) => {
+          next: (url) => {
+            const clip = {
+              uid: this.user?.uid as string,
+              displayName: this.user?.displayName as string,
+              title: this.title.value,
+              fileName: `${clipFileName}.mp4`,
+              url,
+            };
+            this.clipsService.createClip(clip);
             this.alertColor = 'green';
             this.alertMsg = 'Success! Your clip is now ready to share.';
             this.showPercentage = false;

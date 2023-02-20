@@ -53,6 +53,7 @@ export class UploadComponent {
   }
 
   uploadFile() {
+    this.uploadForm.disable();
     this.showAlert = true;
     this.alertMsg = 'Please wait, your account is being created.';
     this.alertColor = 'blue';
@@ -89,6 +90,7 @@ export class UploadComponent {
             this.showPercentage = false;
           },
           error: (error) => {
+            this.uploadForm.enable();
             this.alertColor = 'red';
             this.alertMsg = 'Upload failed! Please try again later.';
             this.inSubmission = true;

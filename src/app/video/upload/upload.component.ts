@@ -1,11 +1,11 @@
-import { Component } from '@angular/core';
-import { FormGroup, FormControl, Validators } from '@angular/forms';
-import { AngularFireStorage } from '@angular/fire/compat/storage';
-import { v4 as uuid } from 'uuid';
-import { last, switchMap } from 'rxjs';
-import { AngularFireAuth } from '@angular/fire/compat/auth';
+import {Component} from '@angular/core';
+import {FormGroup, FormControl, Validators} from '@angular/forms';
+import {AngularFireStorage} from '@angular/fire/compat/storage';
+import {v4 as uuid} from 'uuid';
+import {last, switchMap} from 'rxjs';
+import {AngularFireAuth} from '@angular/fire/compat/auth';
 import firebase from 'firebase/compat/app';
-import { ClipService } from '../../services/clip.service';
+import {ClipService} from '../../services/clip.service';
 
 @Component({
   selector: 'app-upload',
@@ -42,7 +42,9 @@ export class UploadComponent {
 
   storeFile($event: Event) {
     this.isDragOver = false;
-    this.file = ($event as DragEvent).dataTransfer?.files.item(0) ?? null;
+    this.file = ($event as DragEvent).dataTransfer ?
+      ($event as DragEvent).dataTransfer?.files.item(0) ?? null :
+      ($event.target as HTMLInputElement).files?.item(0) ?? null;
 
     if (!this.file || this.file.type !== 'video/mp4') {
       return;

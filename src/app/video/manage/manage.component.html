@@ -2,7 +2,7 @@
 <section class="container mx-auto my-8 bg-secondary p-6">
   <div class="rounded relative flex justify-between">
     <a routerLink="/upload" class="bg-indigo-400 text-white py-4 px-10 text-xl"
-    >Upload Videos</a
+      >Upload Videos</a
     >
 
     <!-- Sort Videos -->
@@ -10,7 +10,7 @@
       (change)="sort($event)"
       class="text-black px-8 text-xl outline-none appearance-none"
     >
-      <option value="1" [selected]="videoOrder === '1'"> Recent Uploads</option>
+      <option value="1" [selected]="videoOrder === '1'">Recent Uploads</option>
       <option value="2" [selected]="videoOrder === '2'">Oldest Uploads</option>
     </select>
   </div>
@@ -20,7 +20,8 @@
 <div class="container mx-auto my-8">
   <!-- Video List -->
   <div class="grid grid-cols-1 lg:grid-cols-3 gap-4">
-    <div *ngFor="let clip of clips"
+    <div
+      *ngFor="let clip of clips"
       class="mt-6 rounded-tl-2xl rounded-br-2xl shadow-xl bg-secondary flex flex-col justify-start"
     >
       <!-- Image -->
@@ -34,7 +35,7 @@
       <!-- Body -->
       <div class="p-6 text-2xl">
         <!-- Link -->
-        <a href="#" class="font-bold mb-2"> {{clip.title}} </a>
+        <a href="#" class="font-bold mb-2"> {{ clip.title }} </a>
         <a
           href="#"
           class="bg-gray-400 text-white px-2 py-1 ml-2 text-sm rounded"

@@ -1,8 +1,8 @@
-import {Component, OnInit} from '@angular/core';
-import {ActivatedRoute, Params, Router} from '@angular/router';
-import {ClipService} from "../../services/clip.service";
-import IClip from "../../../models/clip.model";
-import {ModalService} from "../../services/modal.service";
+import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute, Params, Router } from '@angular/router';
+import { ClipService } from '../../services/clip.service';
+import IClip from '../../../models/clip.model';
+import { ModalService } from '../../services/modal.service';
 
 @Component({
   selector: 'app-manage',
@@ -11,7 +11,7 @@ import {ModalService} from "../../services/modal.service";
 })
 export class ManageComponent implements OnInit {
   videoOrder = '1';
-  clips: IClip[] = []
+  clips: IClip[] = [];
   activeClip: IClip | null = null;
 
   constructor(
@@ -19,27 +19,26 @@ export class ManageComponent implements OnInit {
     private route: ActivatedRoute,
     private clipService: ClipService,
     private modal: ModalService
-    ) {
-  }
+  ) {}
 
   ngOnInit(): void {
     this.route.queryParams.subscribe((params: Params) => {
       this.videoOrder = params.sort == '2' ? params.sort : '1';
     });
-    this.clipService.getUserClips().subscribe(docs => {
-      this.clips = []
+    this.clipService.getUserClips().subscribe((docs) => {
+      this.clips = [];
 
       docs.forEach((doc) => {
         this.clips.push({
           docID: doc.id,
-          ...doc.data()
-        })
-      })
-    })
+          ...doc.data(),
+        });
+      });
+    });
   }
 
   sort(event: Event) {
-    const {value} = event.target as HTMLSelectElement;
+    const { value } = event.target as HTMLSelectElement;
 
     // both of these lines of code accomplish the same thing, navigate can do more
     // this.router.navigateByUrl(`/manage?sort=${value}`);
@@ -52,10 +51,9 @@ export class ManageComponent implements OnInit {
     });
   }
 
-  openModal($event:Event, clip: IClip){
-    $event.preventDefault()
-    this.activeClip = clip
-    this.modal.toggleModal('editClip')
-
+  openModal($event: Event, clip: IClip) {
+    $event.preventDefault();
+    this.activeClip = clip;
+    this.modal.toggleModal('editClip');
   }
 }
